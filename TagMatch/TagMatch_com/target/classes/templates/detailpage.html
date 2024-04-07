@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+  <html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="'#'+${Ctagname}"></title>
+  <link rel="stylesheet" th:href="@{/commonstyle.css}"></head>
+<style>
+  a {
+    text-decoration: none;
+    color: black;
+  }
+
+  body {
+    margin: 75px 0;
+  }
+
+  table {
+    padding: 20px;
+    margin: 10vh 0;
+    width: 80vw;
+    background-color: #FFFFFF;
+    text-align: center;
+    border-radius: 5vmin;
+    box-shadow: 5px 5px 10px 3px rgba(0, 0, 0, 0.4);
+  }
+
+  th {
+    padding: 10px;
+    font-size: 4vmin;
+  }
+
+  td {
+    padding: 10px;
+    font-size: 3vmin;
+  }
+
+  .top_container {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 30px;
+    z-index: 999;
+    background-color: #fefefe;
+  }
+</style>
+
+<body>
+  <iframe class="header" id="header" src="header" frameborder="0"></iframe>
+  <iframe id="side" class="side" src="sidebar" frameborder="0"></iframe>
+
+  <div class="top_container">
+    <th:block th:replace="~{fragments/loginFragment :: loginFragment}"></th:block>
+  </div>
+
+  <div class="">그래프</div>
+  <table>
+    <tr>
+      <th>순위</th>
+      <th>해시태그</th>
+      <th>개수</th>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td><a href="">#태그</a></td>
+      <td>32458</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td><a href="">#태그</a></td>
+      <td>32458</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td><a href="">#태그</a></td>
+      <td>32458</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td><a href="">#태그</a></td>
+      <td>32458</td>
+    </tr>
+  </table>
+</body>
+<script>
+  function sidebar() {
+    var target = document.getElementById("side")
+    if (window.getComputedStyle(target).visibility != "visible") {
+      target.classList.add("side-active")
+      target.style.visibility = "visible";
+      target.style.opacity = 1;
+      target.style.height = "minmax(100%," + document.body.clientHeight + "px)";
+    }
+    else {
+      target.classList.remove("side-active")
+      target.style.visibility = "hidden";
+      target.style.opacity = 0;
+    }
+  }
+</script>
+
+</html>

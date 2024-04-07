@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="'#'+${Ctagname}"></title>
+  <link rel="stylesheet" th:href="@{/commonstyle.css}">
+  <script src="https://kit.fontawesome.com/509a9d04d1.js" crossorigin="anonymous"></script>
+</head>
+<style>
+  body {
+    margin: 80px 0;
+  }
+
+  .TOP3 {
+    box-shadow: 5px 5px 10px 3px rgba(0, 0, 0, 0.4);
+    background-color: #FFFFFF;
+    display: grid;
+    grid-template-columns: 10vh 20px calc(100% - 10vh - 30px);
+    width: 80vw;
+    max-width: 730px;
+    min-height: 10vw;
+    margin: 20px;
+    border-radius: 20px;
+  }
+
+  .platformimg>img {
+    margin: 5px;
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+  }
+
+  .relatedWords {
+    word-break: break-all;
+    padding: 5px;
+    margin-top: 10px;
+    transition: 0.5s;
+    overflow-x: scroll;
+    display: flex;
+    width: 100vw;
+  }
+
+  .rTagClass {
+    align-items: center;
+    white-space: nowrap;
+    height: 20px;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 10px;
+    background-color: #e5e4e4;
+  }
+
+  a {
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    color: rgb(53, 53, 53);
+  }
+
+  .makeTag {
+    margin: 20px;
+    width: 80vw;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .makeTag button{
+    cursor: pointer;
+  }
+  .btnSet {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .copyBtn {
+    visibility: hidden;
+    position: relative;
+    left: 80px;
+    transition: 0.5s;
+    cursor: pointer;
+  }
+  .top_container {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 30px;
+    z-index: 919;
+    background-color: #fefefe;
+  }
+
+tr td:nth-child(1){width: 8px;}
+tr td:nth-child(2){max-width: 15vw;}
+tr td:nth-child(3){width: 80px; font-weight: bold;}
+td{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+</style>
+
+<body>
+  <iframe class="header" id="header" src="header" frameborder="0"></iframe>
+  <iframe id="side" class="side" src="sidebar" frameborder="0"></iframe>
+
+  <div class="top_container">
+    <th:block th:replace="~{fragments/loginFragment :: loginFragment}"></th:block>
+  </div>
+
+  <div class="bookmark&detail" style="width: 95vw; display: flex; justify-content: flex-end; margin-top: 15px; text-align: end">
+    <form th:if="${session.userName}" action="/bookmark" method="post">
+      <div style="font-size: large; text-align: end; color: gray; margin-right: 10px; cursor:pointer;">
+        <a th:if="${isBookMark}" class="bookmarkStar" style="color: #2994F1; text-shadow: 1px 1px 1px black" th:href="@{/remove/bookmark(tagname=${Ctagname})}">
+          <i class="fa-solid fa-star" onclick="this.form.submit()"></i>
+          즐겨찾기
+        </a>
+        <a th:if="!${isBookMark}" class="bookmarkStar" style="color: #A9A9A9" th:href="@{/bookmark(tagname=${Ctagname})}">
+          <i class="fa-solid fa-star" onclick="this.form.submit()"></i>
+          즐겨찾기
+        </a>
+      </div>
+    </form>
+  </div>
+
+  <div id="relatedWords" class="relatedWords">
+    <!-- relation tags information-->
+    <!-- data-value 0: being not in textarea, 1: being in textarea -->
+    <a class="rTagClass" data-value="0" th:each = "t, i:${Rtags}" th:text="${t}" th:href="@{tagpage?tagname={value}(value=${t})}"></a>
+  </div>
+
+  <div class="makeTag">
+    <textarea name="" id="makeTagBox" cols="10" rows="5" placeholder="태그를 선택하거나 입력해주세요."
+      style="height: 0; visibility: hidden; margin: 0px; padding: 0px; border-radius: 10px; border: 3px solid #2c97ed; transition: 0.3s;"></textarea>
+    <div class="btnSet" style="align-items: end;">
+      <button id="copyBtn" class="copyBtn" onclick="copyTags()"
+        style="margin: 0; width: 80px; padding: 5px 0; border-radius: 5px; border: none; background-color: #7a7a7a; color: aliceblue;">복사</button>
+      <button id="makeTagBtn" class="makeTagBtn" onclick="makeTag()"
+        style="margin: 0; width: 80px; padding: 5px 0; border-radius: 5px; border: none; background-color: #7a7a7a; color: aliceblue;">태그만들기</button>
+    </div>
+  </div>
+
+  <div class="INSTA TOP3">
+    <div class="platformimg">
+      <img
+        src="https://mblogthumb-phinf.pstatic.net/MjAxODA4MjBfMTYz/MDAxNTM0NzMxOTA1NzI5.iiZw2j9KPxorBAw1rDxzLH7DjLH4qL0rXPWjDfZDSUIg.VAddbzhp-eDEEqeLYjCNMbZDfIcgjs3GUMUZ8q9aiVgg.PNG.gaogirl/instagram_PNG9.png?type=w800"
+        alt="인스타로고">
+    </div>
+    <hr>
+    <table>
+      <tr th:each="t, i : ${iList}">
+        <td th:text="${i.index+1}+위"></td>
+        <td><a th:href="${t.url}" th:text="${t.content}"></a></td>
+        <td th:text="'&nbsp;&nbsp;❤️&nbsp;'+${t.likes}"></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="YOUTUBE TOP3">
+    <div class="platformimg">
+      <img
+        src="http://wiki.hash.kr/images/9/97/%EC%9C%A0%ED%8A%9C%EB%B8%8C_%EB%A1%9C%EA%B3%A0.png"
+        alt="유튜브로고">
+    </div>
+    <hr>
+    <table>
+      <tr th:each="t, i : ${yList}">
+        <td th:text="${i.index+1}+위"></td>
+        <td><a th:href="${t.url}" th:text="${t.content}"></a></td>
+        <td th:text="'&nbsp;&nbsp;❤️&nbsp;'+${t.likes}"></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="TIKTOK TOP3">
+    <div class="platformimg">
+      <img src="https://images.wondershare.kr/uniconverter/article/vcj31-1.png" alt="틱톡로고">
+    </div>
+    <hr>
+    <table>
+      <tr th:each="t, i : ${tList}">
+        <td th:text="${i.index+1}+위"></td>
+        <td><a th:href="${t.url}" th:text="${t.content}"></a></td>
+        <td th:text="'&nbsp;&nbsp;❤️&nbsp;'+${t.likes}"></td>
+      </tr>
+    </table>
+    </div>
+
+  </div>
+</body>
+<script>
+
+  const addTagFuntion = function (event){
+    addTag(event.currentTarget)
+  };
+
+  function sidebar() {
+    var target = document.getElementById("side")
+
+    if (window.getComputedStyle(target).visibility != "visible") {
+      target.classList.add("side-active")
+      target.style.visibility = "visible";
+      target.style.opacity = 1;
+      target.style.height = "minmax(100%," + document.body.clientHeight + "px)";
+    }
+    else {
+      target.classList.remove("side-active")
+      target.style.visibility = "hidden";
+      target.style.opacity = 0;
+    }
+  }
+
+  /**
+   * make makeTag area
+   * remove makeTag area
+   */
+  function makeTag() {
+    const makeTagBox = document.querySelector("#makeTagBox")
+    var target = document.getElementById("makeTagBox");
+    var tags = document.querySelectorAll(".rTagClass");
+
+    if (window.getComputedStyle(target).visibility != "visible") {
+      /**
+       * remove href link
+       * adding eventListener to add text to textarea
+       */
+      tags.forEach(function (element){
+        element.addEventListener("click", addTagFuntion);
+        element.href="javascript:void(0)"
+      });
+
+      document.getElementById("relatedWords").style.display = "inline-block";
+      document.getElementById("relatedWords").style.height = "100%";
+      document.getElementById("relatedWords").style.width = "80vw";
+      document.getElementById("copyBtn").style.visibility = "visible";
+      document.getElementById("copyBtn").style.left = "-5px";
+
+      target.style.visibility = "visible";
+      target.style.opacity = 1;
+      target.style.height = "150px";
+      target.style.padding = "20px";
+      target.style.margin = "10px 0";
+
+      document.getElementById("relatedWords").style.lineHeight = "2.5";
+      document.getElementById("makeTagBtn").innerText = "취소하기"
+    }
+    else {
+      tags.forEach(function (element){
+        makeTagBox.textContent = ""
+
+        element.setAttribute("data-value", "0")
+        element.style.background = "#e5e4e4"
+        element.style.color = "#000000"
+        element.href=`tagpage?tagname=${element.textContent}`
+
+        console.log(element.textContent , element.getAttribute("data-value"))
+        // element.removeEventListener("click", addTag)
+        element.removeEventListener("click", addTagFuntion)
+      });
+
+      document.getElementById("relatedWords").style.width = "";
+      document.getElementById("relatedWords").style.lineHeight = "";
+      document.getElementById("copyBtn").style.visibility = "hidden";
+      document.getElementById("copyBtn").style.left = "";
+
+      target.style.visibility = "hidden";
+      target.style.opacity = 0;
+      target.style.height = "0px";
+      target.style.padding = "0px";
+      target.style.margin = "0px";
+
+      document.getElementById("relatedWords").style.height = "";
+      document.getElementById("relatedWords").style.display = "";
+      document.getElementById("makeTagBtn").innerText = "태그만들기"
+    }
+  }
+
+  /**
+   * copy to tag names from textarea
+   * @param event
+   */
+  function copyTags(event){
+    const makeTagBox = document.getElementById("makeTagBox")
+
+    makeTagBox.select()
+    makeTagBox.setSelectionRange(0, 99999);
+    document.execCommand('copy')
+    alert('복사되었습니다, 감사합니다.');
+  }
+
+  /**
+   * Add tag name to textarea
+   * @param textContent : text to do add textarea
+   */
+  function addTag(element){
+    const makeTagBox = document.querySelector("#makeTagBox")
+    let tagBox = makeTagBox.value;
+    let tagText = element.textContent
+
+    let tagDataValue = element.getAttribute("data-value")
+
+    if (tagDataValue === "0"){
+      console.log(tagText, "추가")
+      element.setAttribute("data-value", "1")
+      element.style.background = "#2994F1"
+      element.style.color = "#FFFFFF"
+
+      tagBox = tagBox+ "#" + tagText +", ";
+    }
+    else if(tagDataValue === "1"){
+      console.log(tagText, "제거")
+      element.setAttribute("data-value", "0")
+      element.style.background = "#e5e4e4"
+      element.style.color = "#000000"
+      subText = "#"+tagText+", "
+      tagBox = tagBox.replace(subText, "")
+    }
+
+    console.log(element.getAttribute("data-value"))
+
+    makeTagBox.textContent = tagBox
+  }
+
+  function userBookmark(){
+
+  }
+
+</script>
+</html>

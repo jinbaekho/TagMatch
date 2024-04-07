@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer</title>
+    <link rel="stylesheet" th:href="@{/commonstyle.css}">
+    <script src="https://kit.fontawesome.com/334bc39b2b.js" crossorigin="anonymous"></script>
+</head>
+<style>
+    body {
+        margin-top: 180px;
+        padding: 0;
+    }
+    
+    .top_container {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        height: 30px;
+        z-index: 901;
+        background-color: #fefefe;
+    }
+    
+    .header {
+        z-index: 900;
+        position: fixed;
+        top: 30px;
+        left: 0;
+        width: 100vw;
+        height: 60px;
+        box-shadow: 0px 5px 10px 3px #00000038;
+    }
+    
+    .side {
+        z-index: 999;
+        border: none;
+        right: 0;
+        top: 0;
+        position: fixed;
+        transition: 0.3s;
+        opacity: 0;
+        visibility: hidden;
+        width: 0;
+        height: 100%;
+    }
+    
+    .side-active {
+        width: 270px;
+    }
+    
+    a {
+        cursor: pointer;
+        text-decoration: none;
+        color: black;
+        font-weight: bold;
+    }
+    
+    .git {
+        font-size: 50px;
+    }
+    
+    .hidden {
+        z-index:-1;
+        opacity: 0;
+    }
+    .evSet{
+        display: flex;
+        align-items: center;
+        >*{margin: 50px;
+            transition: 0.5s;
+        }
+    }
+    
+    .pname {
+        text-wrap: nowrap;
+        height: 10vmin;
+        font-size: 6vmin;
+        font-weight: bold;
+    }
+    i{font-size: 10vmin;}
+    .crew{width: 30vmin; height: 60vmin;}
+    
+    img {
+        margin: 6vmin;
+        width: 30vmin;
+        border-radius: 100%;
+        box-shadow: 5px 5px 10px 3px rgba(0, 0, 0, 0.4);
+    }
+    
+    .person {
+        position: fixed;
+        transition: 0.5s;
+        width: 30vmin;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+</style>
+
+<body>
+    <div class="top_container">
+        <th:block th:replace="~{fragments/loginFragment :: loginFragment}"></th:block>
+    </div>
+    <iframe class="header" id="header" src="header" frameborder="0"></iframe>
+    <iframe id="side" class="side" src="sidebar" name="sideb" frameborder="0"></iframe>
+    <div class="evSet">
+        <a onclick="showPrevious()"><i class="fa-solid fa-chevron-left" style="color: #4d87ea;"></i></a>
+        <div class="crew">
+            <div class="person" id="1">
+                <img src="images/홍근혁.jpg">
+                <a class="git" th:href="@{'https://github.com/fnqkfnqk'}"><span class="pname">홍근혁 </span><i class="fa-brands fa-github"
+                    style="color: #8517b0;"></i></a>
+                </div>
+                <div class="person hidden" id="2">
+                    <img src="images/백진호.jpg">
+                <a class="git" th:href="@{'https://github.com/jinbaekho'}"><span class="pname">백진호 </span><i class="fa-brands fa-github"
+                        style="color: #8517b0;"></i></a>
+            </div>
+            <div class="person hidden" id="3">
+                <img src="images/조경래.jpg">
+                <a class="git" th:href="@{'https://github.com/aaaasfz123'}"><span class="pname">조경래 </span><i
+                        class="fa-brands fa-github" style="color: #8517b0;"></i></a>
+            </div>
+            <div class="person hidden" id="4">
+                <img src="images/종현선.jpg">
+                <a class="git" th:href="@{'https://github.com/funkyplayer95'}"><span class="pname">종현선 </span><i
+                        class="fa-brands fa-github" style="color: #8517b0;"></i></a>
+            </div>
+            <div class="person hidden" id="5">
+                <img src="images/정은아.jpg">
+                <a class="git" th:href="@{'https://github.com/enahha'}"><span class="pname">정은아 </span><i class="fa-brands fa-github"
+                        style="color: #8517b0;"></i></a>
+            </div>
+            <div class="person hidden" id="6">
+                <img src="images/탁창우.jpg">
+                <a class="git" th:href="@{'https://github.com/blackRabbit6'}"><span class="pname">탁창우 </span><i
+                        class="fa-brands fa-github" style="color: #8517b0;"></i></a>
+            </div>
+        </div>
+        <a onclick="showNext()"><i class="fa-solid fa-chevron-right" style="color: #4d87ea;"></i></a>
+    </div>
+</body>
+<script>
+  let currentIndex = 1;
+  const totalItems = 6;
+  const intervalTime = 1500;
+
+  function showContent(index) {
+    for (let i = 1; i <= totalItems; i++) {
+      const element = document.getElementById(String(i));
+      if (element) {
+        if (i === index) {
+          element.classList.remove('hidden');
+        } else {
+          element.classList.add('hidden');
+        }
+      }
+    }
+  }
+
+  function showPrevious() {
+    currentIndex = (currentIndex - 1) > 0 ? (currentIndex - 1) : totalItems;
+    showContent(currentIndex);
+  }
+
+  function showNext() {
+    currentIndex = (currentIndex + 1) <= totalItems ? (currentIndex + 1) : 1;
+    showContent(currentIndex);
+  }
+
+  function autoChange() {
+    showNext();
+    setTimeout(autoChange, intervalTime);
+  }
+
+  // 초기화
+  showContent(currentIndex);
+  // 자동 변경 시작
+  setTimeout(autoChange, intervalTime);
+
+    function sidebar() {
+        var target = document.getElementById("side");
+        if (window.getComputedStyle(target).visibility != "visible") {
+            target.classList.add("side-active")
+            target.style.visibility = "visible";
+            target.style.opacity = 1;
+            target.style.height = "minmax(100%," + document.body.clientHeight + "px)";
+        }
+        else {
+            target.classList.remove("side-active")
+            target.style.visibility = "hidden";
+            target.style.opacity = 0;
+        }
+    }
+</script>
+
+</html>

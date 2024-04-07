@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>알림창</title>
+        <th:block th:if="${#strings.length(data.message) != 0}">
+            <script>
+                alert("[[${data.message}]]");
+            </script>
+        </th:block>
+    <th:block th:if="${#strings.length(data.href) != 0}">
+        <script>
+            window.history.back();
+        </script>
+    </th:block>
+</head>
+</html>

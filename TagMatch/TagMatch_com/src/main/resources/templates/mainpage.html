@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>main</title>
+    <link rel="stylesheet" th:href="@{/commonstyle.css}">
+</head>
+<style>
+    a {
+        text-decoration: none;
+        color: #2380ccfd;
+    }
+
+    img {
+        object-fit: contain;
+        height: 100%;
+        width: 100%;
+    }
+
+    .side {
+        z-index: 999;
+        border: none;
+        right: 0;
+        top: 0;
+        position: fixed;
+        transition: 0.3s;
+        opacity: 0;
+        visibility: hidden;
+        width: 0;
+        height: 100%;
+    }
+
+    .side-active {
+        width: 270px;
+    }
+
+    .top_container {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        height: 30px;
+        z-index: 999;
+        background-color: #fefefe;
+    }
+
+    .headbar {
+        z-index: 901;
+        position: fixed;
+        justify-content: center;
+        width: 100%;
+        padding: 10px 5px;
+        display: grid;
+        top: 25px;
+        grid-template-rows: 40px;
+        grid-template-columns: calc(100vw - 40px) 40px;
+        align-items: center;
+        background-color: #fefefe;
+        box-shadow: 0px 1px 1px 1px #00000018;
+    }
+
+    .searchbar {
+        padding: 5px;
+        margin-top: 140px;
+        height: 5vmin;
+        width: 85vw;
+        display: flex;
+        border: solid #2c97ed 3px;
+        border-radius: 2vmin;
+        align-items: center;
+        justify-content: end;
+
+        >input {
+            text-align: center;
+            font-size: 100%;
+            width: 100%;
+            height: 100%;
+            border: hidden;
+
+            &:focus {
+                outline: none;
+            }
+        }
+
+    }
+
+    .tablehead {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        font-size: 6.5vmin;
+
+        >div {
+            height: 10vmin;
+            width: 100vw;
+            margin: 10px;
+        }
+    }
+
+    .tablediv {
+        margin-top: 40px;
+        width: 80vw;
+        max-width: 730px;
+    }
+
+    table {
+        margin: 10vh 0 3vh 0;
+        width: 100%;
+        background-color: #FFFFFF;
+        text-align: center;
+        border-radius: 5vmin;
+        box-shadow: 5px 5px 10px 3px rgba(0, 0, 0, 0.4);
+    }
+
+    th {
+        padding: 10px;
+        font-size: 4vmin;
+    }
+
+    td {
+        padding: 8px;
+        font-size: 3vmin;
+    }
+    tr td:nth-child(2) {
+        max-width: 15vw;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+<body>
+    <div class="top_container">
+        <th:block th:replace="~{fragments/loginFragment :: loginFragment}"></th:block>
+    </div>
+
+    <div class="headbar">
+        <img style="padding-left:30px" src="images/logo_font.png"
+            alt="로고">
+        <div class="hambuger" style="cursor: pointer;" onclick="sidebar()">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAYFBMVEX///8AAADPz89LS0uWlpb39/eCgoKQkJCxsbH29vZiYmI4ODh0dHTX19empqbFxcXr6+sQEBDh4eEbGxu7u7s0NDR6enpXV1egoKDJyclvb28ODg6IiIhcXFwfHx8ZGRnwNjATAAACZUlEQVR4nO3dCW7CMBCFYRdIw75vbSm9/y2rqKgUVRo72NJoxv93gveUkGBj7BAAAAAAAAAAAAAAAAAAoAKrdjq0Y9qu+tVbH1/sOa7TC7baYZ/UJvZrZtpJnzZrkgputHNm2KRUPGinzHKIF3zVzpjpNVZwq50w2zbScKodMNtULjjRzlfARGw41o5XwFhsONeOV8BcbGj3ZX83Extqpyui8oY77XQFXMWGJ+14BZzEhlbHTX/JY6iBdrwCFmJDD48auWBYaufLtow0NP803cUKhoV2xEyRT6H9+zR6j3bO2ikznFMKhrDSzvm05GnhxuYgap40l3izHlmbcpuNekx53y7kdmDHts/lAwAAAAAAAAAAxjRvy5Edy7e+P1zsh9q/JfU23PfoN7hqx33KdZBa0O5i9ugy9h+f2jkzfKYUfNdOmeU9XtD6Sm95lXfwsFhfXqofwkU7YLZLpKF2vgLkgnYXC93Jy4bsvgrv5JeivS9r/w3Fhh/a8QrYiA210xVR+TX0/zn0/yz1/z708KiRC1bwvdT+2CI6JeV+fFjBGL+CeRrLT5vEubYK5kuD/znvjvffLQAAAAAAAAAAgCHO94myt9fXoddeXxOj+7XFFkD/srtsKHHPPff7Jrrf+9L//qVf2hEzRfegtX2PdmL3qXa+AuSC/vfz9r8nu/999a3v5t2Rn6ba6YqovKH/c2ZsDpseyWcFWV/l3ZFXettfqh/9I7D7c9cqODvP/H+7EhazW5tke5RwhmVoLI+Bk84h9X+WbLA7hko9DzhUcKZzx/m53AAAAAAAAAAAAAAAAABg0zfn21Nf0tdOJAAAAABJRU5ErkJggg=="
+                alt="햄버거바">
+        </div>
+    </div>
+    <iframe class="side" id="side" src="sidebar" frameborder="0"></iframe>
+    <form action="tagpage" method="get">
+        <div class="searchbar">
+            <input type="text" name="tagname">
+            <input type="image" onclick="this.form.submit(); return false"
+                src="https://images.velog.io/images/orol116/post/423104a2-c4ea-47e6-8829-9d37d3df3a09/123.png" alt="돋보기"
+                style="object-fit: contain; max-width: 50px; max-height: 50px; width:100%; height:100%; cursor:pointer;">
+        </div>
+    </form>
+    <div class="tablediv">
+        <div class="tablehead">
+            <div style="color: #2c97ed;font-weight: bolder; font-size: 10vmin;" class="WEEK">👑&nbsp;LAST WEEK 👑</div>
+        </div>
+        <table>
+            <tr>
+                <th>순위</th>
+                <th>해시태그</th>
+
+            </tr>
+            <tr th:each="t, i : ${tagrank}" th:if="${i.index < 30}">
+                <td th:text="${i.index+1}" style="font-weight: bold;"></td>
+                <td>
+                    <a th:text="'#'+${t.tagid}" th:href="@{tagpage?tagname={value}(value=${t.tagid})}"> </a>
+                </td>
+
+            </tr>
+        </table>
+        <a th:if="${session.role}" href="/mainpage/reload">새로고침</a>
+    </div>
+    <script>
+        function sidebar() {
+            var target = document.getElementById("side")
+            if (window.getComputedStyle(target).visibility != "visible") {
+                target.classList.add("side-active")
+                target.style.visibility = "visible";
+                target.style.opacity = 1;
+                target.style.height = "minmax(100%," + document.body.clientHeight + "px)";
+            }
+            else {
+                target.classList.remove("side-active")
+                target.style.visibility = "hidden";
+                target.style.opacity = 0;
+            }
+        }
+    </script>
+</body>
+
+</html>

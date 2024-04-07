@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<script src="https://kit.fontawesome.com/334bc39b2b.js" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sing Up</title>
+    <link rel="stylesheet" th:href="@{/singupForm.css}">
+</head>
+<style>
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    .top_container {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        height: 30px;
+        z-index: 999;
+        background-color: #fefefe;
+    }
+
+    .header {
+        z-index: 900;
+        position: fixed;
+        top: 30px;
+        left: 0;
+        width: 100vw;
+        height: 60px;
+        box-shadow: 0px 5px 10px 3px #00000038;
+    }
+
+    .side {
+        z-index: 999;
+        border: none;
+        right: 0;
+        top: 0;
+        position: fixed;
+        transition: 0.3s;
+        opacity: 0;
+        visibility: hidden;
+        width: 0;
+        height: 100%;
+    }
+
+    .side-active {
+        width: 270px;
+    }
+
+    .err {
+        color: red;
+    }
+</style>
+
+<body>
+    <div class="top_container">
+        <th:block th:replace="~{fragments/loginFragment :: loginFragment}"></th:block>
+    </div>
+
+    <iframe class="header" id="header" src="header" frameborder="0"></iframe>
+    <iframe id="side" class="side" src="sidebar" name="sideb" frameborder="0"></iframe>
+
+    <div>
+        <form id="singup_form" role="form" action="/signin" th:object="${MemberFormDto}" method="post">
+            <label>
+                <p class="label-txt">ENTER YOUR EMAIL</p>
+                <input type="email" class="input" th:field="*{email}">
+                <div class="line-box">
+                    <div class="line"></div>
+                </div>
+            </label>
+            <label>
+                <p class="label-txt">ENTER YOUR NAME</p>
+                <input type="text" class="input" th:field="*{name}">
+                <div class="line-box">
+                    <div class="line"></div>
+                </div>
+            </label>
+            <label>
+                <p class="label-txt">ENTER YOUR PASSWORD</p>
+                <input type="password" class="input" id="pwInput" th:field="*{passwd}">
+                <div class="line-box">
+                    <div class="line"></div>
+                </div>
+            </label>
+            <label>
+                <p class="label-txt">RE ENTER PASSWORD</p>
+                <input type="password" class="input" id="rePwInput" th:field="*{rePasswd}">
+                <div class="line-box">
+                    <div class="line"></div>
+                </div>
+            </label>
+            <button type="submit" class="signinBtn">submit</button>
+        </form>
+    </div>
+    <script>
+
+        $(document).ready(function () {
+            $('.input').focus(function () {
+                $(this).parent().find(".label-txt").addClass('label-active');
+            });
+
+            $('.label-txt').click(function () {
+                $(this).addClass('label-active');
+                $(this).parent().find('.input').focus();
+            });
+
+            $(".input").focusout(function () {
+                if ($(this).val() == '') {
+                    $(this).parent().find(".label-txt").removeClass('label-active');
+                }
+            });
+        });
+
+
+        <!--sidebar function-->
+        function sidebar() {
+            var target = document.getElementById("side");
+            if (window.getComputedStyle(target).visibility != "visible") {
+                target.classList.add("side-active")
+                target.style.visibility = "visible";
+                target.style.opacity = 1;
+                target.style.height = "minmax(100%," + document.body.clientHeight + "px)";
+            }
+            else {
+                target.classList.remove("side-active")
+                target.style.visibility = "hidden";
+                target.style.opacity = 0;
+            }
+        }
+
+
+        function sendSignInRequest() {
+            var signInForm = document.getElementById('singup_form');
+            var formData = new FormData(signInForm);
+
+            fetch('/signup', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.hasOwnProperty('success')) {
+                        alert('회원가입 성공');
+                        window.location.href = '/mainpage';
+                    } else {
+                        var errorMessages = '';
+                        for (const key in data) {
+                            if (data.hasOwnProperty(key)) {
+                                errorMessages += data[key] + '\n';
+                            }
+                        }
+                        alert(errorMessages);
+                        window.location.href = '/signup';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('요청을 처리하는 동안 오류가 발생했습니다.');
+                });
+        }
+        document.getElementById('singup_form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            sendSignInRequest();
+        });
+
+
+    </script>
+</body>
+
+</html>

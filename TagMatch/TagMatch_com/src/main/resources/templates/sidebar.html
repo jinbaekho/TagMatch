@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sidebar</title>
+    <link rel="stylesheet" th:href="@{/commonstyle.css}">
+    <script src="https://kit.fontawesome.com/334bc39b2b.js" crossorigin="anonymous"></script>
+</head>
+<style>
+    body {
+        margin: 0px;
+        padding: 0px;
+        background-color: #1479cc;
+    }
+    .sidebar {
+        right: 0;
+        width: 250px;
+        display: flex;
+        flex-direction: column;
+    }
+    li {
+        list-style: none;
+        padding-bottom: 30%;
+        display: flex;
+        align-items: center;
+    }
+    .logg{
+        display: flex;
+        >*{margin: 10px;}
+    }
+    a{
+        vertical-align:baseline;
+        text-align: left;
+        text-decoration: none;
+        color: aliceblue;
+        align-items: center;
+    }
+    .x{
+        cursor: pointer;
+        top: 40px;
+        right: 5px;
+        position: fixed;
+        display: flex;
+        justify-content: end;
+    }
+    .menu{
+        margin-top: 40%;
+        padding-left: 30px;
+    }
+    .menu a {
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+    }
+    li > a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+    }
+    i{font-size: 50px;}
+
+</style>
+<body>
+    <div class="hambuger">
+        <div class="sidebar">
+            <div id="xBnt" class="x" onclick="closeSide()">
+                <img src="https://cdn-icons-png.flaticon.com/512/75/75519.png" alt="" width="30px" height="30px">
+            </div>
+            <div class="menu">
+                <ul>
+                    <li>
+                        <a onclick="rankpagemove()">
+                            <i class="fa-solid fa-ranking-star" style="color: #ffffff;"></i>
+                            <h4>주간 순위</h4>
+                        </a>
+                    </li>
+                    <li>
+                        <a onclick="categorypagemove()">
+                            <i class="fa-solid fa-icons" style="color: #ffffff;"></i>
+                            <h4>카테고리</h4>
+                        </a>
+                    </li>
+                    <li>
+                        <a onclick="developermove()">
+                            <i class="fa-solid fa-laptop-code" style="color: #ffffff;"></i>
+                            <h4>개발자</h4>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+
+
+        function closeSide(sdf) {
+            window.parent.sidebar();
+        }
+
+        function mypagemove() {
+            window.parent.location.href="/mypage";
+        }
+
+        function googlelogin() {
+            location.href="oauth2/authorization/google";
+        }
+
+        function googlelogout() {
+            location.href="/logout";
+        }
+        function rankpagemove() {
+            window.parent.location.href="/rankpage";
+        }
+        function categorypagemove() {
+            window.parent.location.href="/categorypage";
+        }
+        function developermove() {
+        window.parent.location.href="/developer";
+        }
+
+    </script>
+
+</body>
+</html>

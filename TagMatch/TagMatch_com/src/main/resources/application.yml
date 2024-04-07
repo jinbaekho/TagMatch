@@ -1,0 +1,27 @@
+server:
+    port: 8067
+
+spring:
+    thymeleaf:
+        cache: false
+        check-template-location: true
+        prefix: classpath:/templates/
+        suffix: .html
+        enabled: true
+    messages:
+        basename: errors
+        
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url:
+        username:
+        password:
+    jpa:
+        show-sql: true
+        hibernate:
+            ddl-auto: update
+    output:
+        ansi:
+            enabled: ALWAYS
+    profiles:
+        include: oauth

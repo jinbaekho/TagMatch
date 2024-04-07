@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>header</title>
+    <link rel="stylesheet" th:href="@{/commonstyle.css}"></head>
+</head>
+<style>
+    body {
+        background-color: #FDFDFD;
+    }
+
+    a {
+        text-decoration: none;
+        color: black;
+    }
+
+    img {
+        cursor: pointer;
+        object-fit: contain;
+        height: 70%;
+        width: 70%;
+        padding-left: 25%;
+    }
+
+    .headbar {
+        transition: 0.3s;
+        justify-content: center;
+        width: 100%;
+        padding: 10px 5px;
+        display: grid;
+        grid-template-rows: 40px;
+        grid-template-columns: 80px minmax(80px, 100%) 40px 40px;
+        align-items: center;
+    }
+
+    .searchbar {
+        padding-left: 20px;
+        right: 77px;
+        justify-self: end;
+        height: 30px;
+        width: 0;
+        position: absolute;
+        display: flex;
+        border: solid #2c97ed 3px;
+        align-items: center;
+        border-radius: 20px;
+        transition: all 0.3s ease-in-out;
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    input {
+        border: none;
+        outline: none;
+        width: 100%;
+        display: flex;
+    }
+
+    .pageName {
+        transition: 0.3s;
+        padding-left: 20px;
+        color: #2c97ed;
+        font-size: 30px;
+    }
+</style>
+
+<body>
+
+    <div class="headbar">
+        <div class="logo">
+            <img src="images/logo_img.png"
+                alt="로고" onclick="mainpagemove()">
+        </div>
+        <div id="pageName" class="pageName"></div>
+        <input class="searchbar" type="text" id="searchbar" onkeydown="handleKeyPress(event)" placeholder="">
+        <img src="https://images.velog.io/images/orol116/post/423104a2-c4ea-47e6-8829-9d37d3df3a09/123.png" alt=""
+            onclick="Searchicon()">
+
+        <div class="hambuger" onclick="sidebar()">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAYFBMVEX///8AAADPz89LS0uWlpb39/eCgoKQkJCxsbH29vZiYmI4ODh0dHTX19empqbFxcXr6+sQEBDh4eEbGxu7u7s0NDR6enpXV1egoKDJyclvb28ODg6IiIhcXFwfHx8ZGRnwNjATAAACZUlEQVR4nO3dCW7CMBCFYRdIw75vbSm9/y2rqKgUVRo72NJoxv93gveUkGBj7BAAAAAAAAAAAAAAAAAAoAKrdjq0Y9qu+tVbH1/sOa7TC7baYZ/UJvZrZtpJnzZrkgputHNm2KRUPGinzHKIF3zVzpjpNVZwq50w2zbScKodMNtULjjRzlfARGw41o5XwFhsONeOV8BcbGj3ZX83Extqpyui8oY77XQFXMWGJ+14BZzEhlbHTX/JY6iBdrwCFmJDD48auWBYaufLtow0NP803cUKhoV2xEyRT6H9+zR6j3bO2ikznFMKhrDSzvm05GnhxuYgap40l3izHlmbcpuNekx53y7kdmDHts/lAwAAAAAAAAAAxjRvy5Edy7e+P1zsh9q/JfU23PfoN7hqx33KdZBa0O5i9ugy9h+f2jkzfKYUfNdOmeU9XtD6Sm95lXfwsFhfXqofwkU7YLZLpKF2vgLkgnYXC93Jy4bsvgrv5JeivS9r/w3Fhh/a8QrYiA210xVR+TX0/zn0/yz1/z708KiRC1bwvdT+2CI6JeV+fFjBGL+CeRrLT5vEubYK5kuD/znvjvffLQAAAAAAAAAAgCHO94myt9fXoddeXxOj+7XFFkD/srtsKHHPPff7Jrrf+9L//qVf2hEzRfegtX2PdmL3qXa+AuSC/vfz9r8nu/999a3v5t2Rn6ba6YqovKH/c2ZsDpseyWcFWV/l3ZFXettfqh/9I7D7c9cqODvP/H+7EhazW5tke5RwhmVoLI+Bk84h9X+WbLA7hko9DzhUcKZzx/m53AAAAAAAAAAAAAAAAABg0zfn21Nf0tdOJAAAAABJRU5ErkJggg=="
+                alt="햄버거바">
+        </div>
+    </div>
+</body>
+
+<script>
+
+    document.getElementById("pageName").textContent = window.parent.document.title;
+    function handleKeyPress(event) {
+        // Enter keyCode 13
+        if (event.keyCode === 13) {Searchicon();}
+    }
+
+    function Searchicon() {
+        var target = document.getElementById("searchbar")
+        var pageName = document.getElementById("pageName")
+        if (window.getComputedStyle(target).visibility != "visible") {
+            target.style.width = "calc(92vw - 160px)";
+            target.style.visibility = "visible";
+            pageName.style.visibility = "hidden";
+            target.style.opacity = 1;
+        }
+        else {
+            target.style.width = "0%";
+            target.style.visibility = "hidden";
+            pageName.style.visibility = "visible";
+            target.style.opacity = 0;
+            if(target.value!=""){
+            window.parent.location.href="tagpage?tagname="+target.value;
+            }
+        }
+    }
+    function sidebar() { window.parent.sidebar(); }
+    function mainpagemove() {window.parent.location.href="mainpage";}
+</script>
+
+</html>

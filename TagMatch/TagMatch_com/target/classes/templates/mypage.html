@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마이페이지</title>
+    <link rel="stylesheet" th:href="@{/commonstyle.css}">
+</head>
+<style>
+    body {
+        margin: 80px 0;
+        padding: 0;
+    }
+
+    .top_container {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        height: 30px;
+        z-index: 901;
+        background-color: #fefefe;
+    }
+
+    .header {
+        z-index: 900;
+        position: fixed;
+        top: 30px;
+        left: 0;
+        width: 100vw;
+        height: 60px;
+        box-shadow: 0px 5px 10px 3px #00000038;
+    }
+
+    .side {
+        z-index: 999;
+        border: none;
+        right: 0;
+        top: 0;
+        position: fixed;
+        transition: 0.3s;
+        opacity: 0;
+        visibility: hidden;
+        width: 0;
+        height: 100%;
+    }
+
+    .side-active {
+        width: 270px;
+    }
+
+    .userInfo {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        margin-top: 20px;
+    }
+
+    .userInfo>* {
+        margin-right: 20px;
+    }
+
+
+    .content h4 {
+        margin-left: 10px;
+    }
+
+    .box {
+        /* box-shadow: 5px 5px 10px 3px rgba(0, 0, 0, 0.4); */
+        background-color: #FFFFFF;
+        grid-template-columns: 10vh 20px calc(80% - 10vh - 20px) 20%;
+        min-height: 10vw;
+        width: 80vw;
+        max-width: 730px;
+        margin: 5px 20px 20px 20px;
+        border-radius: 20px;
+        border: 3px solid #2c97ed;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .box div {
+        width: 98%;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0px 15px;
+    }
+
+    li {
+        display: flex;
+        justify-content: space-between;
+        padding: 5px;
+    }
+
+    .withdrawButton {
+        display: inline-block;
+        padding: 12px 24px;
+        background: rgb(220, 220, 220);
+        font-weight: bold;
+        color: rgb(120, 120, 120);
+        border: none;
+        outline: none;
+        border-radius: 3px;
+        cursor: pointer;
+        transition: ease .3s;
+    }
+
+    .withdrawButton:hover {
+        background: #1565C0;
+        color: #ffffff;
+    }
+</style>
+
+<body>
+
+    <div class="top_container">
+        <th:block th:replace="~{fragments/loginFragment :: loginFragment}"></th:block>
+    </div>
+
+    <iframe class="header" id="header" src="header" frameborder="0"></iframe>
+    <iframe id="side" class="side" src="sidebar" name="sideb" frameborder="0"></iframe>
+
+    <div class="userInfo">
+        <h3>Hello, </h3>
+        <h1 id="username" th:text="${session.userName}"></h1>
+    </div>
+    <div class="content">
+        <h4>최근검색어</h4>
+        <div class="recentSearchHistory box">
+            <div class="recentSearchHistory_word">
+                <ul>
+                    <li th:each="history : ${searchhistoryList}">
+                        <a style="width: 100%; height: 100%; display: flex; justify-content: space-between;" th:href="@{/tagpage(tagname=${history.lastSearch})}">
+                            <span th:text="${history.lastSearch}"></span>
+                            <span th:text="${history.searchDate}+'&emsp;'"></span>
+                        </a>
+                        <form action="/remove/history" method="get">
+                            <a style="white-space:nowrap;" th:text="삭제" th:href="@{/remove/history(tagname=${history.lastSearch})}"
+                                onclick="this.form.submit()"></a>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <h4>즐겨찾기</h4>
+        <div class="favorites box">
+            <div class="favorites_word">
+                <ul>
+                    <li th:each="bookmark :${userBookMarkDtoList}">
+                        <a th:text="${bookmark.BookMark}" th:href="@{/tagpage(tagname=${bookmark.BookMark})}">
+                            <h5> >> 이동하기</h5>
+                        </a>
+                        <form action="/remove/bookmark" method="get">
+                            <a style="white-space:nowrap;" th:text="삭제" th:href="@{/remove/bookmark(tagname=${bookmark.BookMark})}"
+                                onclick="this.form.submit()"></a>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <button class="withdrawButton" onclick="Withdrawal()">회원탈퇴</button>
+
+    <script>
+        function sidebar() {
+            var target = document.getElementById("side");
+            if (window.getComputedStyle(target).visibility != "visible") {
+                target.classList.add("side-active")
+                target.style.visibility = "visible";
+                target.style.opacity = 1;
+                target.style.height = "minmax(100%," + document.body.clientHeight + "px)";
+            }
+            else {
+                target.classList.remove("side-active")
+                target.style.visibility = "hidden";
+                target.style.opacity = 0;
+            }
+        }
+
+        function Withdrawal() {
+            var confirmWithdrawal = confirm("회원 탈퇴를 진행하시겠습니까?");
+
+            if (confirmWithdrawal) {
+                window.location.href = "/Withdrawal";
+            } else {
+                alert("탈퇴가 취소되었습니다.");
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>

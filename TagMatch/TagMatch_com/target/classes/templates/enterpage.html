@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>입장페이지</title>
+</head>
+<style>
+  a {
+  text-decoration: none;
+  color: white;
+  }
+  body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    margin: 0 auto;
+
+  }
+  img{
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+  }
+  button{
+    width: 50vmin;
+    height: 10vmin;
+    border-radius: 3vmin;
+    color: white;
+    font-size: 5vmin;
+    font-weight: bolder;
+    border: hidden;
+    background-color: #2c97ed;
+    box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.4);
+    transition: 0.5s;
+    &:hover{
+      box-shadow: 0px 0px 15px 3px rgba(0, 0, 0, 0.2);
+      transform: scale(1.05);
+    }
+  }
+    .logoimg{
+    witgh:250px;
+    height: 250px;
+    margin-bottom:100px;
+    margin-top:300px;
+    }
+
+</style>
+<body>
+  <div class="logoimg">
+  <img src="images/LogoPng.png" alt="">
+  </div>
+  <button><a href="mainpage">유행 따라가기</a></button>
+</body>
+</html>
